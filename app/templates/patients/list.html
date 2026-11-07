@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Patients · MediCare Cabinet{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div><p class="eyebrow">RÉPERTOIRE</p><h1>Patients</h1><p class="muted-copy">{{ patients|length }} résultat(s) sur cette page</p></div>
+  <a class="btn btn-primary" href="{{ url_for('patients.create_patient') }}"><span aria-hidden="true">＋</span> Nouveau patient</a>
+</section>
+<form class="search-row" method="get" action="{{ url_for('patients.list_patients') }}">
+  <label class="visually-hidden" for="patient-search">Rechercher un patient</label><input class="form-control" id="patient-search" type="search" name="q" value="{{ search }}" placeholder="Nom ou téléphone">
+  <button class="btn btn-dark" type="submit">Rechercher</button>{% if search %}<a class="btn btn-outline-secondary" href="{{ url_for('patients.list_patients') }}">Effacer</a>{% endif %}
+</form>
+<section class="section-block compact-top">
+  {% if patients %}<div class="table-responsive"><table class="table data-table"><thead><tr><th>Nom</th><th class="col-birth">Date de naissance</th><th>Téléphone</th><th class="col-email">E-mail</th><th></th></tr></thead><tbody>
+    {% for patient in patients %}<tr><td><a class="table-link" href="{{ url_for('patients.patient_detail', patient_id=patient.id) }}">{{ patient.full_name }}</a></td><td class="col-birth">{{ patient.date_of_birth.strftime('%d/%m/%Y') if patient.date_of_birth else '—' }}</td><td>{{ patient.phone or '—' }}</td><td class="col-email">{{ patient.email or '—' }}</td><td><a class="icon-link" href="{{ url_for('patients.patient_detail', patient_id=patient.id) }}" aria-label="Ouvrir le dossier de {{ patient.full_name }}">Ouvrir →</a></td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty-state">Aucun patient ne correspond à cette recherche.</div>{% endif %}
+  {% if pages > 1 %}<nav class="pagination-row" aria-label="Pagination"><span>Page {{ page }} sur {{ pages }}</span><div>{% if page > 1 %}<a class="btn btn-sm btn-outline-secondary" href="{{ url_for('patients.list_patients', q=search, page=page-1) }}">← Précédent</a>{% endif %}{% if page < pages %}<a class="btn btn-sm btn-outline-secondary" href="{{ url_for('patients.list_patients', q=search, page=page+1) }}">Suivant →</a>{% endif %}</div></nav>{% endif %}
+</section>
+{% endblock %}

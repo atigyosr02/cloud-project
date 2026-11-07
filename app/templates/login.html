@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Connexion · MediCare Cabinet{% endblock %}
+{% block content %}
+<section class="login-layout">
+  <div class="login-intro">
+    <p class="eyebrow">ESPACE DE SOINS</p>
+    <h1>Bienvenue au<br><span>cabinet.</span></h1>
+    <p class="lead-copy">Connectez-vous à votre espace professionnel.</p>
+    <div class="login-note"><span class="status-dot"></span> Environnement de démonstration · données fictives</div>
+  </div>
+  <div class="login-panel">
+    <h2>Connexion</h2>
+    <p class="muted-copy">Accédez à votre espace MediCare.</p>
+    <form method="post" action="{{ url_for('auth.login') }}" class="form-stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div><label class="form-label" for="email">Adresse e-mail</label><input class="form-control" id="email" name="email" type="email" autocomplete="username" maxlength="254" required autofocus></div>
+      <div><label class="form-label" for="password">Mot de passe</label><input class="form-control" id="password" name="password" type="password" autocomplete="current-password" required></div>
+      <button class="btn btn-primary w-100" type="submit">Se connecter <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="security-caption">Votre session se ferme automatiquement après 15 minutes d’inactivité.</p>
+  </div>
+</section>
+{% endblock %}

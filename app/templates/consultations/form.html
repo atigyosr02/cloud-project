@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Note de consultation · MediCare Cabinet{% endblock %}
+{% block content %}
+<nav class="breadcrumb-line"><a href="{{ url_for('patients.patient_detail', patient_id=patient.id) }}">{{ patient.full_name }}</a><span>/</span><span>Nouvelle consultation</span></nav>
+<section class="page-heading"><div><p class="eyebrow">NOTE MÉDICALE</p><h1>Nouvelle consultation</h1><p class="muted-copy">Dossier de {{ patient.full_name }}</p></div></section>
+<form class="form-panel form-stack" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><div><label class="form-label" for="note">Note de consultation</label><textarea class="form-control clinical-note" id="note" name="note" maxlength="10000" required>{{ request.form.get('note', '') }}</textarea><div class="form-text">Maximum 10 000 caractères.</div></div><div class="form-actions"><a class="btn btn-outline-secondary" href="{{ url_for('patients.patient_detail', patient_id=patient.id) }}">Annuler</a><button class="btn btn-primary" type="submit">Enregistrer la note</button></div></form>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Utilisateurs · MediCare Cabinet{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">ADMINISTRATION</p><h1>Utilisateurs</h1></div><a class="btn btn-primary" href="{{ url_for('admin.create_user') }}">＋ Créer un compte</a></section>
+<section class="section-block">{% if users %}<div class="table-responsive"><table class="table data-table"><thead><tr><th>Nom</th><th>E-mail</th><th>Rôle</th><th>État</th><th>Actions</th></tr></thead><tbody>{% for user in users %}<tr><td>{{ user.name }}</td><td>{{ user.email }}</td><td>{{ {'admin': 'Administration', 'medecin': 'Médecin', 'secretaire': 'Secrétariat'}.get(user.role, user.role) }}</td><td><span class="state-pill {{ 'state-muted' if not user.is_active else '' }}">{{ 'Actif' if user.is_active else 'Désactivé' }}</span></td><td>{% if user.is_active %}<form method="post" action="{{ url_for('admin.deactivate_user', user_id=user.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="link-button danger-link" type="submit">Désactiver</button></form>{% else %}—{% endif %}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state">Aucun utilisateur.</div>{% endif %}</section>
+{% endblock %}

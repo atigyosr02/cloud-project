@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · MediCare Cabinet{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">DOSSIER PATIENT</p><h1>{{ title }}</h1></div></section>
+<form class="form-panel form-stack" method="post" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div><label class="form-label" for="full_name">Nom complet <span class="required-mark">*</span></label><input class="form-control" id="full_name" name="full_name" maxlength="160" value="{{ patient.full_name if patient else request.form.get('full_name', '') }}" required></div>
+  <div class="form-grid"><div><label class="form-label" for="date_of_birth">Date de naissance</label><input class="form-control" id="date_of_birth" name="date_of_birth" type="date" value="{{ patient.date_of_birth.isoformat() if patient and patient.date_of_birth else request.form.get('date_of_birth', '') }}"></div>
+  <div><label class="form-label" for="phone">Téléphone</label><input class="form-control" id="phone" name="phone" type="tel" maxlength="30" value="{{ patient.phone if patient else request.form.get('phone', '') }}"></div></div>
+  <div><label class="form-label" for="email">E-mail</label><input class="form-control" id="email" name="email" type="email" maxlength="254" value="{{ patient.email if patient else request.form.get('email', '') }}"></div>
+  <div><label class="form-label" for="address">Adresse</label><textarea class="form-control" id="address" name="address" rows="2" maxlength="300">{{ patient.address if patient else request.form.get('address', '') }}</textarea></div>
+  <div class="form-actions"><a class="btn btn-outline-secondary" href="{{ url_for('patients.patient_detail', patient_id=patient.id) if patient else url_for('patients.list_patients') }}">Annuler</a><button class="btn btn-primary" type="submit">Enregistrer</button></div>
+</form>
+{% endblock %}

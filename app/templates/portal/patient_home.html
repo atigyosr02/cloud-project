@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Mon espace · MediCare Cabinet{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div><p class="eyebrow">ESPACE PATIENT · DOSSIER N° {{ patient.id }}</p><h1>Mon dossier patient</h1><p class="muted-copy">Bonjour {{ patient.full_name }}. Consultez vos informations, votre suivi et vos prochains rendez-vous.</p></div>
+</section>
+<section class="patient-portal-grid">
+  <article class="detail-section">
+    <p class="eyebrow">MES INFORMATIONS</p>
+    <dl class="info-list"><div><dt>Date de naissance</dt><dd>{{ patient.date_of_birth.strftime('%d/%m/%Y') if patient.date_of_birth else 'Non renseignée' }}</dd></div><div><dt>Téléphone</dt><dd>{{ patient.phone or 'Non renseigné' }}</dd></div><div><dt>E-mail</dt><dd>{{ patient.email or 'Non renseigné' }}</dd></div></dl>
+  </article>
+  <article class="detail-section">
+    <p class="eyebrow">MON PLANNING</p><h2 class="portal-heading">Prochains rendez-vous</h2>
+    {% if appointments %}<div class="record-list">{% for appointment in appointments %}<div class="portal-appointment"><time>{{ appointment.starts_at.strftime('%d/%m/%Y · %H:%M') }}</time><span>{{ appointment.doctor_name }}</span></div>{% endfor %}</div>{% else %}<p class="muted-copy">Aucun rendez-vous à venir.</p>{% endif %}
+  </article>
+  <article class="detail-section portal-medical-record">
+    <p class="eyebrow">MON SUIVI MÉDICAL</p><h2 class="portal-heading">Consultations</h2>
+    {% if consultations %}<div class="record-list">{% for consultation in consultations %}<article class="record-item"><div class="record-meta"><time>{{ consultation.consulted_at.strftime('%d/%m/%Y · %H:%M') }}</time><span>{{ consultation.doctor_name }}</span></div><p>{{ consultation.note }}</p></article>{% endfor %}</div>{% else %}<p class="muted-copy">Aucune consultation enregistrée.</p>{% endif %}
+  </article>
+  <article class="detail-section portal-prescriptions">
+    <p class="eyebrow">MES PRESCRIPTIONS</p><h2 class="portal-heading">Ordonnances</h2>
+    {% if prescriptions %}<div class="record-list">{% for prescription in prescriptions %}<article class="record-item"><div class="record-meta"><time>{{ prescription.prescribed_at.strftime('%d/%m/%Y · %H:%M') }}</time><span>{{ prescription.doctor_name }}</span></div><p class="prescription-text">{{ prescription.medicines }}</p>{% if prescription.instructions %}<p class="prescription-instructions"><strong>Consignes :</strong> {{ prescription.instructions }}</p>{% endif %}</article>{% endfor %}</div>{% else %}<p class="muted-copy">Aucune ordonnance disponible.</p>{% endif %}
+  </article>
+  <article class="detail-section portal-documents">
+    <p class="eyebrow">MES DOCUMENTS</p><h2 class="portal-heading">Documents médicaux</h2>
+    {% if documents %}<div class="document-list">{% for document in documents %}<div class="document-row"><span><strong>{{ document.file_type|replace('image/', '')|upper if document.file_type != 'application/pdf' else 'PDF' }}</strong><span class="document-description"><b>{{ document.label }}</b><small>Ajouté le {{ document.created_at.strftime('%d/%m/%Y') }}</small></span></span><a class="text-link" href="{{ url_for('portal.download_own_document', document_id=document.id) }}">Télécharger <span aria-hidden="true">↓</span></a></div>{% endfor %}</div>{% else %}<p class="muted-copy">Aucun document disponible.</p>{% endif %}
+  </article>
+</section>
+<p class="portal-notice">Pour modifier vos coordonnées ou contacter le cabinet, veuillez vous adresser au secrétariat.</p>
+{% endblock %}

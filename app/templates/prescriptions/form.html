@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Nouvelle ordonnance · MediCare Cabinet{% endblock %}
+{% block content %}
+<nav class="breadcrumb-line" aria-label="Fil d’Ariane"><a href="{{ url_for('patients.patient_detail', patient_id=patient.id) }}">{{ patient.full_name }}</a><span>/</span><span>Nouvelle ordonnance</span></nav>
+<section class="page-heading"><div><p class="eyebrow">PRESCRIPTION MÉDICALE</p><h1>Nouvelle ordonnance</h1><p class="muted-copy">Patient : {{ patient.full_name }}</p></div></section>
+<form class="form-panel form-stack" method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <div><label class="form-label" for="medicines">Médicaments et posologie</label><textarea class="form-control clinical-note" id="medicines" name="medicines" maxlength="10000" placeholder="Un médicament par ligne, avec dosage et fréquence" required>{{ request.form.get('medicines', '') }}</textarea><div class="form-text">Inscrivez un médicament par ligne. Un PDF sera ajouté automatiquement aux documents du dossier.</div></div>
+  <div><label class="form-label" for="instructions">Consignes complémentaires</label><textarea class="form-control" id="instructions" name="instructions" rows="3" maxlength="3000">{{ request.form.get('instructions', '') }}</textarea></div>
+  <div class="form-actions"><a class="btn btn-outline-secondary" href="{{ url_for('patients.patient_detail', patient_id=patient.id) }}">Annuler</a><button class="btn btn-primary" type="submit">Ajouter l’ordonnance</button></div>
+</form>
+{% endblock %}

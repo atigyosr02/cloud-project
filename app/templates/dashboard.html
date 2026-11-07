@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord · MediCare Cabinet{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div><p class="eyebrow">VUE D’ENSEMBLE</p><h1>Tableau de bord</h1><p class="muted-copy">Votre activité au cabinet, aujourd’hui.</p></div>
+  <a class="btn btn-primary" href="{{ url_for('appointments.list_appointments') }}">Voir les rendez-vous <span aria-hidden="true">→</span></a>
+</section>
+<section class="metric-grid" aria-label="Indicateurs">
+  <article class="metric-panel"><span class="metric-label">Patients actifs</span><strong>{{ patient_count }}</strong><a href="{{ url_for('patients.list_patients') }}">Ouvrir le répertoire <span aria-hidden="true">↗</span></a></article>
+  <article class="metric-panel metric-accent"><span class="metric-label">Rendez-vous aujourd’hui</span><strong>{{ appointment_count }}</strong><a href="{{ url_for('appointments.list_appointments') }}">Consulter le planning <span aria-hidden="true">↗</span></a></article>
+</section>
+<section class="section-block">
+  <div class="section-heading"><div><p class="eyebrow">À VENIR</p><h2>Prochains rendez-vous</h2></div><a class="text-link" href="{{ url_for('appointments.list_appointments') }}">Tout le planning <span aria-hidden="true">→</span></a></div>
+  {% if upcoming %}
+  <div class="table-responsive"><table class="table data-table"><thead><tr><th>Date et heure</th><th>Patient</th><th>Médecin</th><th>État</th></tr></thead><tbody>
+    {% for item in upcoming %}<tr><td class="date-cell">{{ item.starts_at.strftime('%d/%m/%Y · %H:%M') }}</td><td><a class="table-link" href="{{ url_for('patients.patient_detail', patient_id=item.patient_id) }}">{{ item.full_name }}</a></td><td>{{ item.doctor_name or 'Non attribué' }}</td><td><span class="state-pill">Planifié</span></td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty-state">Aucun rendez-vous à venir.</div>{% endif %}
+</section>
+{% endblock %}

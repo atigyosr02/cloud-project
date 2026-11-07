@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Journal d’activité · MediCare Cabinet{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">ADMINISTRATION</p><h1>Journal d’activité</h1><p class="muted-copy">Actions enregistrées, identité de session et adresse IP.</p></div></section>
+<section class="section-block">{% if logs %}<div class="table-responsive"><table class="table data-table"><thead><tr><th>Date et heure</th><th>Utilisateur</th><th>Action</th><th>Patient</th><th>Adresse IP</th></tr></thead><tbody>{% for entry in logs %}<tr><td class="date-cell">{{ entry.created_at.strftime('%d/%m/%Y · %H:%M:%S') }}</td><td>{{ entry.user_name or 'Compte supprimé' }}</td><td>{{ entry.action }}{% if entry.details %}<small class="table-subtext">{{ entry.details }}</small>{% endif %}</td><td>{{ entry.patient_name or '—' }}</td><td>{{ entry.ip_address or '—' }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state">Aucune activité enregistrée.</div>{% endif %}<div class="pagination-row"><span>Page {{ page }}</span>{% if page > 1 %}<a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.audit_logs', page=page-1) }}">Plus récent</a>{% else %}<a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.audit_logs', page=page+1) }}">Plus ancien →</a>{% endif %}</div></section>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Modifier' if appointment else 'Nouveau' }} rendez-vous · MediCare Cabinet{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">PLANNING</p><h1>{{ 'Modifier le rendez-vous' if appointment else 'Nouveau rendez-vous' }}</h1></div></section>
+<form class="form-panel form-stack" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div><label class="form-label" for="patient_id">Patient</label><select class="form-select" name="patient_id" id="patient_id" required><option value="">Sélectionner un patient</option>{% for patient in patients %}<option value="{{ patient.id }}" {% if appointment and appointment.patient_id == patient.id %}selected{% endif %}>{{ patient.full_name }}</option>{% endfor %}</select></div>
+<div><label class="form-label" for="doctor_id">Médecin</label><select class="form-select" name="doctor_id" id="doctor_id" required><option value="">Sélectionner un médecin</option>{% for doctor in doctors %}<option value="{{ doctor.id }}" {% if appointment and appointment.doctor_id == doctor.id %}selected{% endif %}>{{ doctor.name }}</option>{% endfor %}</select></div>
+<div><label class="form-label" for="starts_at">Date et heure</label><input class="form-control" type="datetime-local" name="starts_at" id="starts_at" value="{{ appointment.starts_at.strftime('%Y-%m-%dT%H:%M') if appointment else '' }}" required></div>
+<div><label class="form-label" for="reason">Motif administratif (facultatif)</label><input class="form-control" type="text" name="reason" id="reason" maxlength="200" value="{{ appointment.reason if appointment else '' }}"></div>
+{% if appointment %}<div><label class="form-label" for="status">État</label><select class="form-select" name="status" id="status"><option value="planifie" {% if appointment.status == 'planifie' %}selected{% endif %}>Planifié</option><option value="annule" {% if appointment.status == 'annule' %}selected{% endif %}>Annulé</option><option value="termine" {% if appointment.status == 'termine' %}selected{% endif %}>Terminé</option></select></div>{% endif %}
+<div class="form-actions"><a class="btn btn-outline-secondary" href="{{ url_for('appointments.list_appointments') }}">Annuler</a><button class="btn btn-primary" type="submit">Enregistrer</button></div></form>
+{% endblock %}

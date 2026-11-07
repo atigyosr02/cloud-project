@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Consultations · MediCare Cabinet{% endblock %}
+{% block content %}
+<nav class="breadcrumb-line"><a href="{{ url_for('patients.patient_detail', patient_id=patient.id) }}">{{ patient.full_name }}</a><span>/</span><span>Consultations</span></nav>
+<section class="page-heading"><div><p class="eyebrow">SUIVI MÉDICAL</p><h1>Historique des consultations</h1></div><a class="btn btn-primary" href="{{ url_for('consultations.create_consultation', patient_id=patient.id) }}">＋ Ajouter une note</a></section>
+<section class="section-block">{% if consultations %}<div class="record-list">{% for consultation in consultations %}<article class="record-item"><div class="record-meta"><time>{{ consultation.consulted_at.strftime('%d/%m/%Y · %H:%M') }}</time></div><p>{{ consultation.note }}</p></article>{% endfor %}</div>{% else %}<div class="empty-state">Aucune consultation enregistrée.</div>{% endif %}</section>
+{% endblock %}
